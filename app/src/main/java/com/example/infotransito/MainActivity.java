@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void goToLanding(){
         Intent i = new Intent(this, LandingActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
         finish();
     }
