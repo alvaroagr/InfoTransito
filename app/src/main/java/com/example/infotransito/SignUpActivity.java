@@ -18,7 +18,6 @@ public class SignUpActivity extends AppCompatActivity {
 
     private TextInputLayout nameWrapper, emailWrapper, passwordWrapper, repasswordWrapper;
     private Button signupBtn;
-    private TextView loginLink;
 
     private FirebaseAuth auth;
     private FirebaseFirestore db;
@@ -33,13 +32,11 @@ public class SignUpActivity extends AppCompatActivity {
         passwordWrapper = findViewById(R.id.passwordWrapper);
         repasswordWrapper = findViewById(R.id.repasswordWrapper);
         signupBtn = findViewById(R.id.signupBtn);
-        loginLink = findViewById(R.id.loginLink);
 
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
 
         signupBtn.setOnClickListener(this::signUp);
-        loginLink.setOnClickListener(this::goToLogin);
     }
 
     private void signUp(View v){
@@ -104,12 +101,6 @@ public class SignUpActivity extends AppCompatActivity {
     private void goToMain() {
         Intent i = new Intent(this, MainActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(i);
-        finish();
-    }
-
-    private void goToLogin(View v){
-        Intent i = new Intent(this, LoginActivity.class);
         startActivity(i);
         finish();
     }
