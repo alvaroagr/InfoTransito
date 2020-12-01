@@ -1,6 +1,9 @@
 package com.example.infotransito;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -21,6 +25,11 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private FirebaseFirestore db;
+
+    private MapsFragment mapsFragment;
+    private ExampleFragment exampleFragment;
+
+    private BottomNavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +45,34 @@ public class MainActivity extends AppCompatActivity {
         }
 
         signoutBtn = findViewById(R.id.signoutBtn);
+        navigationView = findViewById(R.id.bottomNavigationView);
+        mapsFragment = MapsFragment.newInstance();
+        exampleFragment = ExampleFragment.newInstance();
+
+        showFragment(mapsFragment);
+
+
         signoutBtn.setOnClickListener(this::signOut);
+        navigationView.setOnNavigationItemSelectedListener(
+                (menuItem) -> {
+                    switch(menuItem.getItemId()){
+                        case R.id.maps:
+                            showFragment(mapsFragment);
+                            break;
+                        case R.id.example:
+                            showFragment(exampleFragment);
+                            break;
+                    }
+                    return true;
+                }
+        );
+    }
+
+    private void showFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.fragmentContainer, fragment);
+        transaction.commit();
     }
 
     @Override
@@ -67,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void goToLanding(){
         Intent i = new Intent(this, LandingActivity.class);
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
         finish();
     }
