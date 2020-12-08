@@ -112,4 +112,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(i);
         finish();
     }
+
+    public User getMyUser() {
+        return myUser;
+    }
+
+    public void setMyUser(User myUser) {
+        this.myUser = myUser;
+    }
 }

@@ -4,8 +4,10 @@ public class Post {
     private String id;
     private String title;
     private String content;
+    private long timestamp;
     private String userId;
     private String userName;
+    private int likes;
 
     public Post() {
     }
@@ -16,6 +18,7 @@ public class Post {
         this.content = content;
         this.userId = userId;
         this.userName = userName;
+        this.likes = 0;
     }
 
     public String getId() {
@@ -56,5 +59,21 @@ public class Post {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public int getLikes() {
+        return likes;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
     }
 }
