@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
     private MapsFragment mapsFragment;
     private ExampleFragment exampleFragment;
+    private ForumFragment forumFragment;
 
     private BottomNavigationView navigationView;
 
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         navigationView = findViewById(R.id.bottomNavigationView);
         mapsFragment = MapsFragment.newInstance();
         exampleFragment = ExampleFragment.newInstance();
+        forumFragment = ForumFragment.newInstance();
 
         showFragment(mapsFragment);
 
@@ -61,6 +63,9 @@ public class MainActivity extends AppCompatActivity {
                             break;
                         case R.id.example:
                             showFragment(exampleFragment);
+                            break;
+                        case R.id.forum:
+                            showFragment(forumFragment);
                             break;
                     }
                     return true;
@@ -106,5 +111,13 @@ public class MainActivity extends AppCompatActivity {
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
         finish();
+    }
+
+    public User getMyUser() {
+        return myUser;
+    }
+
+    public void setMyUser(User myUser) {
+        this.myUser = myUser;
     }
 }
