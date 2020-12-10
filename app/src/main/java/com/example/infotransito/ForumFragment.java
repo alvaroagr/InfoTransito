@@ -18,6 +18,7 @@ import android.widget.Button;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -90,7 +91,7 @@ public class ForumFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
 
-        db.collection("posts").get().addOnCompleteListener(
+        db.collection("posts").orderBy("timestamp", Query.Direction.DESCENDING).get().addOnCompleteListener(
                 task -> {
                     for(DocumentSnapshot document : task.getResult().getDocuments()) {
                         Post post = document.toObject(Post.class);
