@@ -6,6 +6,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 
+import android.app.DownloadManager;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
@@ -30,11 +31,16 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
 
 import static android.content.Context.LOCATION_SERVICE;
 import java.util.ArrayList;
@@ -47,6 +53,10 @@ public class MapsFragment extends Fragment implements LocationListener, OnMapRea
     private FloatingActionButton camara;
     private FloatingActionButton policeControl;
 
+    private FirebaseFirestore db;
+    private ListenerRegistration suscription;
+    private ArrayList<Markerr> marcadores;
+    private ArrayList<Marker> pointsMarkers;
 
     private MainActivity host;
 
@@ -93,6 +103,10 @@ public class MapsFragment extends Fragment implements LocationListener, OnMapRea
                              @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_maps, container, false);
 
+        db = FirebaseFirestore.getInstance();
+        marcadores = new ArrayList<>();
+        pointsMarkers = new ArrayList<>();
+
         police = root.findViewById(R.id.police);
         grua = root.findViewById(R.id.grua);
         camara = root.findViewById(R.id.camara);
@@ -103,6 +117,7 @@ public class MapsFragment extends Fragment implements LocationListener, OnMapRea
         camara.setOnClickListener(this);
         policeControl.setOnClickListener(this);
 
+        suscribeToMarkers();
         return root;
     }
 
@@ -124,6 +139,7 @@ public class MapsFragment extends Fragment implements LocationListener, OnMapRea
 
         if(checkPermission()){
             mMap.setMyLocationEnabled(true);
+            mMap.getUiSettings().setMapToolbarEnabled(false);
 
             manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
                     3000,
@@ -133,6 +149,13 @@ public class MapsFragment extends Fragment implements LocationListener, OnMapRea
             setInitialPos();
         }
 
+
+    }
+
+    @Override
+    public void onDestroy() {
+        suscription.remove();
+        super.onDestroy();
     }
 
     @Override
@@ -165,6 +188,55 @@ public class MapsFragment extends Fragment implements LocationListener, OnMapRea
             return false;
         }
         return true;
+    }
+
+    private void suscribeToMarkers(){
+        Query references = db.collection("markers");
+        suscription = references.addSnapshotListener(
+                (data,error) ->{
+                    marcadores.clear();
+                    pointsMarkers.forEach(
+                            (value)->{
+                                value.remove();
+                            }
+                    );
+
+                    for(DocumentSnapshot doc: data.getDocuments()){
+                        Markerr markerr = doc.toObject(Markerr.class);
+                        marcadores.add(markerr);
+                        LatLng latLng = new LatLng(markerr.getLat(),markerr.getLng());
+                        if(markerr.getCategory().equals("Policía")){
+                            Marker m = mMap.addMarker(new MarkerOptions().icon(
+                                    BitmapDescriptorFactory.fromResource(R.drawable.policeman)
+                            ).anchor(0.5f,0.5f).position(latLng).title(markerr.getCategory()));
+                            m.setTag(markerr);
+                            pointsMarkers.add(m);
+                        }
+                        if(markerr.getCategory().equals("Grúa")){
+                            Marker m = mMap.addMarker(new MarkerOptions().icon(
+                                    BitmapDescriptorFactory.fromResource(R.drawable.grua_color)
+                            ).anchor(0.5f,0.5f).position(latLng).title(markerr.getCategory()));
+                            m.setTag(markerr);
+                            pointsMarkers.add(m);
+                        }
+                        if(markerr.getCategory().equals("Cámara")){
+                            Marker m = mMap.addMarker(new MarkerOptions().icon(
+                                    BitmapDescriptorFactory.fromResource(R.drawable.camara)
+                            ).anchor(0.5f,0.5f).position(latLng).title(markerr.getCategory()));
+                            m.setTag(markerr);
+                            pointsMarkers.add(m);
+                        }
+                        if(markerr.getCategory().equals("Retén")){
+                            Marker m = mMap.addMarker(new MarkerOptions().icon(
+                                    BitmapDescriptorFactory.fromResource(R.drawable.passport_control)
+                            ).anchor(0.5f,0.5f).position(latLng).title(markerr.getCategory()));
+                            m.setTag(markerr);
+                            pointsMarkers.add(m);
+                        }
+                    }
+
+                }
+        );
     }
 
     @Override
