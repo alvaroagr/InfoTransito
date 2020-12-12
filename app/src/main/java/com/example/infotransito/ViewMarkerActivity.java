@@ -1,50 +1,48 @@
 package com.example.infotransito;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import android.annotation.SuppressLint;
-import android.icu.text.Transliterator;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.storage.FirebaseStorage;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class ViewMarkerActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
-    private String category, description;
+    private String category, description, img;
     private double lat, lng;
 
-    private ImageView categoryIV;
+    private ImageView categoryIV, mapIV;
     private TextView categoryTV, descriptionTV;
     private Button backBtn, likeBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+        setContentView(R.layout.activity_view_marker);
 
         category = getIntent().getExtras().getString("category");
         description = getIntent().getExtras().getString("description");
+        img = getIntent().getExtras().getString("img");
         lat = getIntent().getExtras().getDouble("lat");
         lng = getIntent().getExtras().getDouble("lng");
 
+
         categoryIV = findViewById(R.id.categoryIV);
+        mapIV = findViewById(R.id.mapIV);
         categoryTV = findViewById(R.id.categoryTV);
         descriptionTV = findViewById(R.id.descriptionTV);
         backBtn = findViewById(R.id.backBtn);
@@ -82,6 +80,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        if(img != null){
+            FirebaseStorage.getInstance().getReference().child("marker_images").child(img).getDownloadUrl().addOnCompleteListener(
+                    task -> {
+                        String url = task.getResult().toString();
+                        Glide.with(mapIV).load(url).into(mapIV);
+                    }
+            );
+        }
     }
 
     /**

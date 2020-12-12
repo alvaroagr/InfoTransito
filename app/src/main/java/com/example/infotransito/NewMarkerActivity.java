@@ -20,7 +20,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 
@@ -35,7 +34,7 @@ public class NewMarkerActivity extends AppCompatActivity implements OnMapReadyCa
     private GoogleMap mMap;
 
     private Button backBtn, publishBtn, imgBtn;
-    private TextView titleET, descripcion, categoria ;
+    private TextView descripcion, categoria ;
     private ImageView mapIV;
 
     private String path,nomCategoria;
@@ -62,7 +61,6 @@ public class NewMarkerActivity extends AppCompatActivity implements OnMapReadyCa
         backBtn = findViewById(R.id.backBtn);
         publishBtn = findViewById(R.id.publishBtn);
         imgBtn = findViewById(R.id.imgBtn);
-        titleET = findViewById(R.id.titleET);
         descripcion = findViewById(R.id.descripcion);
         categoria = findViewById(R.id.categoria);
         mapIV = findViewById(R.id.mapIV);
@@ -76,71 +74,71 @@ public class NewMarkerActivity extends AppCompatActivity implements OnMapReadyCa
                 }
         );
 
-//        imgBtn.setOnClickListener(
-//                v -> {
-//                    Toast.makeText(this, "This btn works", Toast.LENGTH_LONG).show();
-//                    Intent j = new Intent(Intent.ACTION_GET_CONTENT);
-//                    j.setType("image/*");
-//                    startActivityForResult(j, 1);
-//                }
-//        );
+        imgBtn.setOnClickListener(
+                v -> {
+                    Toast.makeText(this, "This btn works", Toast.LENGTH_LONG).show();
+                    Intent j = new Intent(Intent.ACTION_GET_CONTENT);
+                    j.setType("image/*");
+                    startActivityForResult(j, 1);
+                }
+        );
 
         publishBtn.setOnClickListener(
                 (v) -> {
-                    String title = titleET.getText().toString();
                     String descrip = descripcion.getText().toString();
 
-//                    if(path != null) {
-//                        try {
-//                            String img = UUID.randomUUID().toString();
-//                            FirebaseStorage.getInstance()
-//                                    .getReference()
-//                                    .child("marker_images")
-//                                    .child(img)
-//                                    .putStream(new FileInputStream(new File(path)))
-//                                    .addOnCompleteListener(
-//                                            task -> {
-//                                                if (task.isSuccessful()) {
-//                                                    String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-//                                                    FirebaseFirestore.getInstance().collection("users")
-//                                                            .document(uid).set(user).addOnCompleteListener(
-//                                                            dataTask -> {
-//                                                                if (dataTask.isSuccessful()) {
-//                                                                    exit();
-//                                                                }
-//                                                            }
-//                                                    );
-//                                                }
-//                                            }
-//                                    );
-//                        } catch (FileNotFoundException e) {
-//                            e.printStackTrace();
-//                        }
-//                    } else {
-//
-//                    }
+                    if(path != null) {
+                        try {
+                            String img = UUID.randomUUID().toString();
+                            FirebaseStorage.getInstance()
+                                    .getReference()
+                                    .child("marker_images")
+                                    .child(img)
+                                    .putStream(new FileInputStream(new File(path)))
+                                    .addOnCompleteListener(
+                                            task -> {
+                                                if (task.isSuccessful()) {
+                                                    String uid = UUID.randomUUID().toString();
+                                                    MapMarker mapMarker = new MapMarker(uid,descrip,nomCategoria,userId,username,lat,lng);
+                                                    mapMarker.setTimestamp(new Date().getTime());
+                                                    mapMarker.setImg(img);
+                                                    FirebaseFirestore.getInstance().collection("markers")
+                                                            .document(uid).set(mapMarker).addOnCompleteListener(
+                                                            dataTask -> {
+                                                                if (dataTask.isSuccessful()) {
+                                                                    exit();
+                                                                } else {
+                                                                    Toast.makeText(this, dataTask.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                                                }
+                                                            }
+                                                    );
+                                                } else {
+                                                    Toast.makeText(this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                                }
+                                            }
+                                    );
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        MapMarker mapMarker = new MapMarker(UUID.randomUUID().toString(),descrip,nomCategoria,userId,username,lat,lng);
+                        mapMarker.setTimestamp(new Date().getTime());
 
-
-
-
-
-
-                    Markerr markerr = new Markerr(UUID.randomUUID().toString(),title,descrip,nomCategoria,userId,username,lat,lng);
-                    markerr.setTimestamp(new Date().getTime());
-
-                    FirebaseFirestore.getInstance()
-                            .collection("markers")
-                            .document(markerr.getId())
-                            .set(markerr)
-                            .addOnCompleteListener(
-                                    task -> {
-                                        if(task.isSuccessful()){
-                                            exit();
-                                        } else {
-                                            Toast.makeText(this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                        FirebaseFirestore.getInstance()
+                                .collection("markers")
+                                .document(mapMarker.getId())
+                                .set(mapMarker)
+                                .addOnCompleteListener(
+                                        task -> {
+                                            if(task.isSuccessful()){
+                                                exit();
+                                            } else {
+                                                Toast.makeText(this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                            }
                                         }
-                                    }
-                            );
+                                );
+
+                    }
                 }
         );
 
@@ -181,16 +179,17 @@ public class NewMarkerActivity extends AppCompatActivity implements OnMapReadyCa
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 18));
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if(requestCode == 1 && resultCode == RESULT_OK){
-//            Uri uri = data.getData();
-//            path = UtilDomi.getPath(this, uri);
-//
-//            Bitmap image = BitmapFactory.decodeFile(path);
-//            mapIV.setImageBitmap(image);
-//        }
-//    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == 1 && resultCode == RESULT_OK){
+            Uri uri = data.getData();
+            path = UtilDomi.getPath(this, uri);
+
+            Bitmap image = BitmapFactory.decodeFile(path);
+            mapIV.setImageBitmap(image);
+            imgBtn.setText("Cambiar imagen");
+        }
+    }
 }

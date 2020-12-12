@@ -6,7 +6,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 
-import android.app.DownloadManager;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
@@ -15,12 +14,9 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +52,7 @@ public class MapsFragment extends Fragment implements LocationListener, OnMapRea
 
     private FirebaseFirestore db;
     private ListenerRegistration suscription;
-    private ArrayList<Markerr> marcadores;
+    private ArrayList<MapMarker> marcadores;
     private ArrayList<Marker> pointsMarkers;
 
     private MainActivity host;
@@ -205,35 +201,35 @@ public class MapsFragment extends Fragment implements LocationListener, OnMapRea
                     );
 
                     for(DocumentSnapshot doc: data.getDocuments()){
-                        Markerr markerr = doc.toObject(Markerr.class);
-                        marcadores.add(markerr);
-                        LatLng latLng = new LatLng(markerr.getLat(),markerr.getLng());
-                        if(markerr.getCategory().equals("Policía")){
+                        MapMarker mapMarker = doc.toObject(MapMarker.class);
+                        marcadores.add(mapMarker);
+                        LatLng latLng = new LatLng(mapMarker.getLat(), mapMarker.getLng());
+                        if(mapMarker.getCategory().equals("Policía")){
                             Marker m = mMap.addMarker(new MarkerOptions().icon(
                                     BitmapDescriptorFactory.fromResource(R.drawable.policeman)
-                            ).anchor(0.5f,0.5f).position(latLng).title(markerr.getCategory()));
-                            m.setTag(markerr);
+                            ).anchor(0.5f,0.5f).position(latLng).title(mapMarker.getCategory()));
+                            m.setTag(mapMarker);
                             pointsMarkers.add(m);
                         }
-                        if(markerr.getCategory().equals("Grúa")){
+                        if(mapMarker.getCategory().equals("Grúa")){
                             Marker m = mMap.addMarker(new MarkerOptions().icon(
                                     BitmapDescriptorFactory.fromResource(R.drawable.grua_color)
-                            ).anchor(0.5f,0.5f).position(latLng).title(markerr.getCategory()));
-                            m.setTag(markerr);
+                            ).anchor(0.5f,0.5f).position(latLng).title(mapMarker.getCategory()));
+                            m.setTag(mapMarker);
                             pointsMarkers.add(m);
                         }
-                        if(markerr.getCategory().equals("Cámara")){
+                        if(mapMarker.getCategory().equals("Cámara")){
                             Marker m = mMap.addMarker(new MarkerOptions().icon(
                                     BitmapDescriptorFactory.fromResource(R.drawable.camara)
-                            ).anchor(0.5f,0.5f).position(latLng).title(markerr.getCategory()));
-                            m.setTag(markerr);
+                            ).anchor(0.5f,0.5f).position(latLng).title(mapMarker.getCategory()));
+                            m.setTag(mapMarker);
                             pointsMarkers.add(m);
                         }
-                        if(markerr.getCategory().equals("Retén")){
+                        if(mapMarker.getCategory().equals("Retén")){
                             Marker m = mMap.addMarker(new MarkerOptions().icon(
                                     BitmapDescriptorFactory.fromResource(R.drawable.passport_control)
-                            ).anchor(0.5f,0.5f).position(latLng).title(markerr.getCategory()));
-                            m.setTag(markerr);
+                            ).anchor(0.5f,0.5f).position(latLng).title(mapMarker.getCategory()));
+                            m.setTag(mapMarker);
                             pointsMarkers.add(m);
                         }
                     }
@@ -288,16 +284,17 @@ public class MapsFragment extends Fragment implements LocationListener, OnMapRea
     @Override
     public boolean onMarkerClick(Marker marker) {
         if(marker.getTag() != null) {
-            Markerr m = (Markerr) marker.getTag();
+            MapMarker m = (MapMarker) marker.getTag();
         }
 
         if(marker.getTag() != null){
-            Markerr m = (Markerr) marker.getTag();
-            Intent i = new Intent(host, MapsActivity.class);
+            MapMarker m = (MapMarker) marker.getTag();
+            Intent i = new Intent(host, ViewMarkerActivity.class);
             i.putExtra("category", m.getCategory());
             i.putExtra("description", m.getContent());
             i.putExtra("lat", m.getLat());
             i.putExtra("lng", m.getLng());
+            i.putExtra("img", m.getImg());
             startActivity(i);
         }
         return true;
