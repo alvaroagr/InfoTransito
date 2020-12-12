@@ -76,7 +76,6 @@ public class NewMarkerActivity extends AppCompatActivity implements OnMapReadyCa
 
         imgBtn.setOnClickListener(
                 v -> {
-                    Toast.makeText(this, "This btn works", Toast.LENGTH_LONG).show();
                     Intent j = new Intent(Intent.ACTION_GET_CONTENT);
                     j.setType("image/*");
                     startActivityForResult(j, 1);
