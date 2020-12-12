@@ -20,6 +20,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +47,7 @@ import static android.content.Context.LOCATION_SERVICE;
 import java.util.ArrayList;
 
 
-public class MapsFragment extends Fragment implements LocationListener, OnMapReadyCallback, View.OnClickListener {
+public class MapsFragment extends Fragment implements LocationListener, OnMapReadyCallback, View.OnClickListener, GoogleMap.OnMarkerClickListener {
 
     private FloatingActionButton police;
     private FloatingActionButton grua;
@@ -147,6 +148,8 @@ public class MapsFragment extends Fragment implements LocationListener, OnMapRea
                     this);
 
             setInitialPos();
+
+            mMap.setOnMarkerClickListener(this);
         }
 
 
@@ -280,5 +283,23 @@ public class MapsFragment extends Fragment implements LocationListener, OnMapRea
                 break;
         }
 
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        if(marker.getTag() != null) {
+            Markerr m = (Markerr) marker.getTag();
+        }
+
+        if(marker.getTag() != null){
+            Markerr m = (Markerr) marker.getTag();
+            Intent i = new Intent(host, MapsActivity.class);
+            i.putExtra("category", m.getCategory());
+            i.putExtra("description", m.getContent());
+            i.putExtra("lat", m.getLat());
+            i.putExtra("lng", m.getLng());
+            startActivity(i);
+        }
+        return true;
     }
 }
