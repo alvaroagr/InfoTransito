@@ -92,10 +92,10 @@ public class MainActivity extends AppCompatActivity {
                 task -> {
                     DocumentSnapshot snapshot = task.getResult();
                     myUser = snapshot.toObject(User.class);
-                    Toast.makeText(this,
-                            "Bienvenido " + myUser.getName(),
-                            Toast.LENGTH_LONG )
-                            .show();
+//                    Toast.makeText(this,
+//                            "Bienvenido " + myUser.getName(),
+//                            Toast.LENGTH_LONG )
+//                            .show();
                 }
         );
 

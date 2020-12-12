@@ -104,10 +104,11 @@
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
             android:layout_marginBottom="16dp"
-            android:text="Información Util"
+            android:text="Información Útil"
             app:layout_constraintBottom_toTopOf="@+id/button2"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            style="@style/PrimaryBtn"/>
 
         <Button
             android:id="@+id/button2"
@@ -119,7 +120,8 @@
             android:text="No es útil"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            style="@style/Btn"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

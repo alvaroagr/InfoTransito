@@ -10,6 +10,7 @@ public class Markerr {
     private String userName;
     private double lat;
     private double lng;
+    private String img;
 
     public Markerr() {
     }

@@ -59,27 +59,35 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
+        android:background="@drawable/marker_bg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"
-        android:background="#F6F6F6">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
+
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="0dp"
+            android:layout_height="180dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:context=".NewMarkerActivity" />
 
         <EditText
             android:id="@+id/descripcion"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="14dp"
             android:ems="10"
             android:gravity="start|top"
-            android:hint="Descripción (Opcional):"
+            android:hint="Descripción (Opcional)"
             android:inputType="textMultiLine"
             android:lines="10"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
+            android:padding="16dp"
             app:layout_constraintBottom_toTopOf="@+id/imgBtn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -88,12 +96,13 @@
 
         <Button
             android:id="@+id/imgBtn"
+            style="@style/SecondaryBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            android:text="Añadir imagenes"
+            android:text="Añadir imagen"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -106,12 +115,11 @@
             android:enabled="true"
             android:hint="Titulo"
             android:inputType="textPersonName"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
+            android:padding="16dp"
             app:layout_constraintBottom_toTopOf="@+id/categoria"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/map" />
 
         <EditText
             android:id="@+id/categoria"
@@ -121,13 +129,21 @@
             android:enabled="false"
             android:hint="Categoría"
             android:inputType="textPersonName"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
+            android:padding="16dp"
             app:layout_constraintBottom_toTopOf="@+id/descripcion"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/titleET" />
+
+        <ImageView
+            android:id="@+id/mapIV"
+            android:layout_width="94dp"
+            android:layout_height="87dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/map"
+            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
