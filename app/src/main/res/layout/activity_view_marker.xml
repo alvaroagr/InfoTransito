@@ -62,7 +62,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:context=".MapsActivity" />
+            tools:context=".ViewMarkerActivity" />
 
         <TextView
             android:id="@+id/categoryTV"
@@ -122,6 +122,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             style="@style/Btn"/>
+
+        <ImageView
+            android:id="@+id/mapIV"
+            android:layout_width="94dp"
+            android:layout_height="87dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/map"
+            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

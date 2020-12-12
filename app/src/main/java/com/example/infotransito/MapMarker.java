@@ -1,8 +1,7 @@
 package com.example.infotransito;
 
-public class Markerr {
+public class MapMarker {
     private String id;
-    private String title;
     private String content;
     private String category;
     private long timestamp;
@@ -12,12 +11,11 @@ public class Markerr {
     private double lng;
     private String img;
 
-    public Markerr() {
+    public MapMarker() {
     }
 
-    public Markerr(String id, String title, String content, String category, String userId, String userName, double lat, double lng) {
+    public MapMarker(String id, String content, String category, String userId, String userName, double lat, double lng) {
         this.id = id;
-        this.title = title;
         this.content = content;
         this.category = category;
         this.userId = userId;
@@ -32,14 +30,6 @@ public class Markerr {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getContent() {
@@ -96,5 +86,13 @@ public class Markerr {
 
     public void setLng(double lng) {
         this.lng = lng;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
     }
 }
