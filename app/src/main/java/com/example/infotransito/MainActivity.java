@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     private MapsFragment mapsFragment;
     private ExampleFragment exampleFragment;
+    private ForumFragment forumFragment;
 
     private BottomNavigationView navigationView;
 
@@ -41,12 +42,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-
-//        setContentView(R.layout.activity_main);
-
-
-
-        //
+      
         ActivityCompat.requestPermissions(this, new String[] {
                 Manifest.permission.CAMERA,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -54,44 +50,6 @@ public class MainActivity extends AppCompatActivity {
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION
         }, 1);
-
-//        auth = FirebaseAuth.getInstance();
-//        db = FirebaseFirestore.getInstance();
-//
-//        if(auth.getCurrentUser() == null){
-//            goToLanding();
-//            return;
-//        }
-//
-//        db.collection("users").document(auth.getUid()).get().addOnCompleteListener(
-//                documentSnapshotTask -> {
-//                    myUser = documentSnapshotTask.getResult().toObject(User.class);
-//                }
-//        );
-//
-//        signoutBtn = findViewById(R.id.signoutBtn);
-//        navigationView = findViewById(R.id.bottomNavigationView);
-//        mapsFragment = MapsFragment.newInstance();
-//        exampleFragment = ExampleFragment.newInstance();
-//
-//        showFragment(mapsFragment);
-////        showFragment(exampleFragment);
-//
-//
-//        signoutBtn.setOnClickListener(this::signOut);
-//        navigationView.setOnNavigationItemSelectedListener(
-//                (menuItem) -> {
-//                    switch(menuItem.getItemId()){
-//                        case R.id.maps:
-//                            showFragment(mapsFragment);
-//                            break;
-//                        case R.id.example:
-//                            showFragment(exampleFragment);
-//                            break;
-//                    }
-//                    return true;
-//                }
-//        );
     }
 
     private void showFragment(Fragment fragment) {
@@ -164,12 +122,15 @@ public class MainActivity extends AppCompatActivity {
 
     public void startup(){
         setContentView(R.layout.activity_main);
+      
+      
+      
         if(auth.getCurrentUser() == null){
             goToLanding();
             return;
         }
-
-        db.collection("users").document(auth.getUid()).get().addOnCompleteListener(
+      
+         db.collection("users").document(auth.getUid()).get().addOnCompleteListener(
                 documentSnapshotTask -> {
                     myUser = documentSnapshotTask.getResult().toObject(User.class);
                 }
@@ -179,10 +140,9 @@ public class MainActivity extends AppCompatActivity {
         navigationView = findViewById(R.id.bottomNavigationView);
         mapsFragment = MapsFragment.newInstance();
         exampleFragment = ExampleFragment.newInstance();
+        forumFragment = ForumFragment.newInstance();
 
         showFragment(mapsFragment);
-//        showFragment(exampleFragment);
-
 
         signoutBtn.setOnClickListener(this::signOut);
         navigationView.setOnNavigationItemSelectedListener(
@@ -194,9 +154,21 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.example:
                             showFragment(exampleFragment);
                             break;
+                        case R.id.forum:
+                            showFragment(forumFragment);
+                            break;
                     }
                     return true;
                 }
         );
+      
+    }
+
+    public User getMyUser() {
+        return myUser;
+    }
+
+    public void setMyUser(User myUser) {
+        this.myUser = myUser;
     }
 }

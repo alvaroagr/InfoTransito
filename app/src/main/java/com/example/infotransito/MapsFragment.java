@@ -2,8 +2,16 @@ package com.example.infotransito;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,30 +24,41 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 
-public class MapsFragment extends Fragment {
+import java.util.ArrayList;
 
+import static android.content.Context.LOCATION_SERVICE;
+
+public class MapsFragment extends Fragment implements LocationListener, OnMapReadyCallback {
+
+    private MainActivity host;
+
+    private GoogleMap mMap;
+
+    // Components
     private Button addBtn;
 
-    private OnMapReadyCallback callback = new OnMapReadyCallback() {
+    // Google Maps
+    private LocationManager manager;
+    private ArrayList<Marker> markers;
 
-        /**
-         * Manipulates the map once available.
-         * This callback is triggered when the map is ready to be used.
-         * This is where we can add markers or lines, add listeners or move the camera.
-         * In this case, we just add a marker near Sydney, Australia.
-         * If Google Play services is not installed on the device, the user will be prompted to
-         * install it inside the SupportMapFragment. This method will only be triggered once the
-         * user has installed Google Play services and returned to the app.
-         */
-        @Override
-        public void onMapReady(GoogleMap googleMap) {
-            LatLng sydney = new LatLng(-34, 151);
-            googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        }
-    };
+    // Global
+    private Position currentPosition;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        host = (MainActivity) getActivity();
+        super.onAttach(context);
+    }
+
+    @Override
+    public void onDetach() {
+        host = null;
+        super.onDetach();
+    }
 
     public MapsFragment(){
 
@@ -58,8 +77,13 @@ public class MapsFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_maps, container, false);
+
+        // View References
         addBtn = root.findViewById(R.id.addBtn);
 
+        markers = new ArrayList<>();
+
+        //
         addBtn.setOnClickListener(
                 v -> {
                     Toast.makeText(root.getContext(), "Map Button works", Toast.LENGTH_LONG).show();
@@ -74,7 +98,60 @@ public class MapsFragment extends Fragment {
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
-            mapFragment.getMapAsync(callback);
+            mapFragment.getMapAsync(this);
+            manager = (LocationManager) host.getSystemService(LOCATION_SERVICE);
         }
     }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        if(checkPermission()){
+            mMap.setMyLocationEnabled(true);
+
+            manager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                    3000,
+                    2,
+                    this);
+
+            setInitialPos();
+        }
+
+    }
+
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+        updateMyLocation(location);
+    }
+
+    @SuppressLint("MissingPermission")
+    private void setInitialPos() {
+        Location location = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if (location != null) goToMyLocation(location);
+    }
+
+    private void updateMyLocation(Location location) {
+        currentPosition = new Position(FirebaseAuth.getInstance().getUid(), location.getLatitude(), location.getLongitude());
+    }
+
+    private void goToMyLocation(Location location){
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        currentPosition = new Position(FirebaseAuth.getInstance().getUid(), location.getLatitude(), location.getLongitude());
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+    }
+
+    private boolean checkPermission() {
+        if (ActivityCompat.checkSelfPermission(host, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(host, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            //Ask for the permission
+            ActivityCompat.requestPermissions(host, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            Toast.makeText(host, "Please give location permission", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
+
 }
