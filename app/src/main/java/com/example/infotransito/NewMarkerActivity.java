@@ -12,29 +12,41 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Date;
 import java.util.UUID;
 
-public class NewPostActivity extends AppCompatActivity {
+public class NewMarkerActivity extends AppCompatActivity {
 
     private Button backBtn, publishBtn, imgBtn;
-    private TextView titleET, contentET;
+    private TextView titleET, descripcion, categoria ;
 
-    private String path;
+    private String path,nomCategoria;
+
+    private double lat;
+    private double lng;
 
     private String userId;
     private String username;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_post);
+        setContentView(R.layout.activity_new_marker);
 
         userId = getIntent().getExtras().getString("userId");
         username = getIntent().getExtras().getString("username");
+        nomCategoria = getIntent().getExtras().getString("category");
+        lat = getIntent().getExtras().getDouble("lat");
+        lng =  getIntent().getExtras().getDouble("lng");
+
 
         backBtn = findViewById(R.id.backBtn);
         publishBtn = findViewById(R.id.publishBtn);
         imgBtn = findViewById(R.id.imgBtn);
         titleET = findViewById(R.id.titleET);
-        contentET = findViewById(R.id.descripcion);
+        descripcion = findViewById(R.id.descripcion);
+        categoria = findViewById(R.id.categoria);
+
+        categoria.setText("Categoría: "+nomCategoria);
+
 
         backBtn.setOnClickListener(
                 (v) -> {
@@ -45,15 +57,15 @@ public class NewPostActivity extends AppCompatActivity {
         publishBtn.setOnClickListener(
                 (v) -> {
                     String title = titleET.getText().toString();
-                    String content = contentET.getText().toString();
+                    String descrip = descripcion.getText().toString();
 
-                    Post post = new Post(UUID.randomUUID().toString(), title, content, userId, username);
-                    post.setTimestamp(new Date().getTime());
+                    Markerr markerr = new Markerr(UUID.randomUUID().toString(),title,descrip,nomCategoria,userId,username,lat,lng);
+                    markerr.setTimestamp(new Date().getTime());
 
                     FirebaseFirestore.getInstance()
-                            .collection("posts")
-                            .document(post.getId())
-                            .set(post)
+                            .collection("markers")
+                            .document(markerr.getId())
+                            .set(markerr)
                             .addOnCompleteListener(
                                     task -> {
                                         if(task.isSuccessful()){
@@ -65,14 +77,6 @@ public class NewPostActivity extends AppCompatActivity {
                             );
                 }
         );
-
-        imgBtn.setOnClickListener(
-                (v) -> {
-                    Toast.makeText(this, "Add Image", Toast.LENGTH_LONG).show();
-                }
-        );
-
-
     }
 
     public void exit(){

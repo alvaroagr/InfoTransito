@@ -1,24 +1,83 @@
 package com.example.infotransito;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
+import android.annotation.SuppressLint;
+import android.icu.text.Transliterator;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
+    private String category, description;
+    private double lat, lng;
+
+    private ImageView categoryIV;
+    private TextView categoryTV, descriptionTV;
+    private Button backBtn, likeBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        category = getIntent().getExtras().getString("category");
+        description = getIntent().getExtras().getString("description");
+        lat = getIntent().getExtras().getDouble("lat");
+        lng = getIntent().getExtras().getDouble("lng");
+
+        categoryIV = findViewById(R.id.categoryIV);
+        categoryTV = findViewById(R.id.categoryTV);
+        descriptionTV = findViewById(R.id.descriptionTV);
+        backBtn = findViewById(R.id.backBtn);
+        likeBtn = findViewById(R.id.likeBtn);
+
+        categoryTV.setText(category);
+        descriptionTV.setText(description);
+
+        switch(category){
+            case "Policía":
+                categoryIV.setImageResource(R.drawable.policeman);
+                break;
+            case "Grúa":
+                categoryIV.setImageResource(R.drawable.grua_color);
+                break;
+            case "Cámara":
+                categoryIV.setImageResource(R.drawable.camara);
+                break;
+            case "Retén":
+                categoryIV.setImageResource(R.drawable.passport_control);
+                break;
+        }
+
+        backBtn.setOnClickListener(
+                v -> finish()
+        );
+
+        likeBtn.setOnClickListener(
+                v -> {
+                    Toast.makeText(this, "This button works.", Toast.LENGTH_LONG).show();
+                }
+        );
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -34,13 +93,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
+    @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        mMap.getUiSettings().setAllGesturesEnabled(false);
+
+        LatLng sydney = new LatLng(lat, lng);
+        mMap.addMarker(new MarkerOptions().position(sydney).title(category));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 18));
     }
+
 }
