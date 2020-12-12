@@ -9,4 +9,8 @@
         android:id="@+id/example"
         android:icon="@drawable/baseline_create_black_18dp"
         android:title="Ejemplo" />
+    <item
+        android:id="@+id/forum"
+        android:icon="@drawable/baseline_forum_black_18dp"
+        android:title="Comunidad" />
 </menu>

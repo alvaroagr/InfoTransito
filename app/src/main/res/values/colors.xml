@@ -11,5 +11,7 @@
 
     <color name="lightBg">#DAF2EC</color>
 
-
+    <color name="black">#000</color>
+    <color name="gray">#4F4F4f</color>
+    <color name="white">#FFF</color>
 </resources>
