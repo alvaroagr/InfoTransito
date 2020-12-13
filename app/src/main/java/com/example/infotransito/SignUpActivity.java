@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -37,7 +38,8 @@ public class SignUpActivity extends AppCompatActivity {
     private TextInputLayout nameWrapper, emailWrapper, passwordWrapper, repasswordWrapper;
     private Button signupBtn;
     private ImageButton addImgBtn;
-    private ImageView profileImg;
+//    private ImageView profileImg;
+    private ShapeableImageView profileShapeImg;
 
     private FirebaseAuth auth;
     private FirebaseFirestore db;
@@ -48,7 +50,9 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        profileImg = findViewById(R.id.profileImg);
+//        profileImg = findViewById(R.id.profileImg);
+        profileShapeImg = findViewById(R.id.profileShapeImg);
+
         nameWrapper = findViewById(R.id.nameWrapper);
         emailWrapper = findViewById(R.id.emailWrapper);
         passwordWrapper = findViewById(R.id.passwordWrapper);
@@ -183,7 +187,8 @@ public class SignUpActivity extends AppCompatActivity {
             path = UtilDomi.getPath(this, uri);
 
             Bitmap image = BitmapFactory.decodeFile(path);
-            profileImg.setImageBitmap(image);
+//            profileImg.setImageBitmap(image);
+            profileShapeImg.setImageBitmap(image);
         }
     }
 
