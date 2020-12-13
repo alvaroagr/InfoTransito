@@ -34,7 +34,7 @@ public class NewPostActivity extends AppCompatActivity {
         publishBtn = findViewById(R.id.publishBtn);
         imgBtn = findViewById(R.id.imgBtn);
         titleET = findViewById(R.id.titleET);
-        contentET = findViewById(R.id.contentET);
+        contentET = findViewById(R.id.descripcion);
 
         backBtn.setOnClickListener(
                 (v) -> {

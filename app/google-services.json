@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "9639837515",
+    "firebase_url": "https://infotransito-5ea46.firebaseio.com",
+    "project_id": "infotransito-5ea46",
+    "storage_bucket": "infotransito-5ea46.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:9639837515:android:70e9d2fe33539a8403f2ce",
+        "android_client_info": {
+          "package_name": "com.example.infotransito"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "9639837515-6jbih2232c6aj5oasq03gjag246g3eo7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.infotransito",
+            "certificate_hash": "10fdf295e16288a444e0d5a468a181b441bd98d3"
+          }
+        },
+        {
+          "client_id": "9639837515-e3vgtgt7ob1s4ujaqgdomqj4dsvkibub.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCO5eqq-wtuaICt8qfK9IYVsIWZZtJTfk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "9639837515-e3vgtgt7ob1s4ujaqgdomqj4dsvkibub.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

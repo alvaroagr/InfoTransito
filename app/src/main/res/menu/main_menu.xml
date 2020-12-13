@@ -3,14 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/maps"
-        android:icon="@drawable/baseline_create_black_18dp"
+        android:icon="@drawable/baseline_room_black_18"
         android:title="Mapa" />
-    <item
-        android:id="@+id/example"
-        android:icon="@drawable/baseline_create_black_18dp"
-        android:title="Ejemplo" />
     <item
         android:id="@+id/forum"
         android:icon="@drawable/baseline_forum_black_18dp"
         android:title="Comunidad" />
+    <item
+        android:id="@+id/example"
+        android:icon="@drawable/baseline_person_black_18"
+        android:title="Perfil" />
 </menu>
