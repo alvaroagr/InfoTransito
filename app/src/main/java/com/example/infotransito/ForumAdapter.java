@@ -1,7 +1,6 @@
 package com.example.infotransito;
 
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,8 +50,12 @@ public class ForumAdapter extends RecyclerView.Adapter<PostView> implements Post
 
     @Override
     public void OnPostClicked(Post post, View v) {
-        Intent i = new Intent(v.getContext(), PostDetails.class);
+        Intent i = new Intent(v.getContext(), PostDetailsActivity.class);
         i.putExtra("post", post);
         v.getContext().startActivity(i);
+    }
+
+    public void clearPosts(){
+        posts.clear();
     }
 }

@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -18,7 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
-public class PostDetails extends AppCompatActivity {
+public class PostDetailsActivity extends AppCompatActivity {
 
     private Post post;
     private TextView title;
@@ -31,6 +32,8 @@ public class PostDetails extends AppCompatActivity {
     private LinearLayoutManager manager;
     private CommentsAdapter adapter;
     private FirebaseFirestore db;
+    private FirebaseAuth auth;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,7 @@ public class PostDetails extends AppCompatActivity {
         setContentView(R.layout.activity_post_details);
 
         db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
         post = (Post) getIntent().getExtras().get("post");
 
         title = findViewById(R.id.postTitleTv);
@@ -63,6 +67,17 @@ public class PostDetails extends AppCompatActivity {
         commentBtn.setOnClickListener(this::postComment);
         back.setOnClickListener(this::goBack);
 
+        db.collection("users").document(auth.getUid()).get().addOnCompleteListener(
+                task -> {
+                    if(task.isSuccessful()){
+                        user = task.getResult().toObject(User.class);
+                    } else {
+                        Toast.makeText(this, "Hubo un problema por su usuario.", Toast.LENGTH_LONG).show();
+                        finish();
+                    }
+                }
+        );
+
         updateComments();
     }
 
@@ -79,9 +94,11 @@ public class PostDetails extends AppCompatActivity {
 
     private void postComment(View v) {
         if(!commentEdt.getText().toString().trim().isEmpty()) {
-            Comment comment = new Comment(UUID.randomUUID().toString(), commentEdt.getText().toString(), post.getUserId(), post.getUserName(), post.getId(), System.currentTimeMillis());
+//            Comment comment = new Comment(UUID.randomUUID().toString(), commentEdt.getText().toString(), post.getUserId(), post.getUserName(), post.getId(), System.currentTimeMillis());
+            Comment comment = new Comment(UUID.randomUUID().toString(), commentEdt.getText().toString(), user.getId(), user.getName(), post.getId(), System.currentTimeMillis());
             db.collection("comments").document(comment.getId()).set(comment);
             adapter.addComment(comment);
+            commentEdt.setText("");
             runOnUiThread(
                     () -> {
                         Toast.makeText(this, "Tu comentario fue publicado", Toast.LENGTH_SHORT).show();
