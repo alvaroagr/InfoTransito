@@ -5,7 +5,7 @@ public class User {
     private String id;
     private String name;
     private String email;
-    private String imgUrl;
+    private String img;
 
     public User() {
     }
@@ -14,7 +14,7 @@ public class User {
         this.id = id;
         this.name = name;
         this.email = email;
-        this.imgUrl = imgUrl;
+        this.img = imgUrl;
     }
 
     public String getId() {
@@ -41,11 +41,11 @@ public class User {
         this.email = email;
     }
 
-    public String getImgUrl() {
-        return imgUrl;
+    public String getImg() {
+        return img;
     }
 
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
+    public void setImg(String img) {
+        this.img = img;
     }
 }

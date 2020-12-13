@@ -16,7 +16,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="#F6F6F6">
+        android:background="#F6F6F6"
+        android:elevation="8dp">
 
         <Button
             android:id="@+id/backBtn"
@@ -28,7 +29,8 @@
             android:text="Atrás"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/TransparentBtn"/>
 
         <Button
             android:id="@+id/publishBtn"
@@ -40,7 +42,8 @@
             android:text="Publicar"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/TransparentBtn"/>
 
         <ImageView
             android:id="@+id/imageView5"
