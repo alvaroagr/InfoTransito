@@ -23,6 +23,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.UUID;
 
 public class EditProfileActivity extends AppCompatActivity {
 
@@ -120,6 +121,8 @@ public class EditProfileActivity extends AppCompatActivity {
                                     auth.getCurrentUser().updateEmail(email).addOnCompleteListener(
                                             innerTask -> {
                                                 if(innerTask.isSuccessful() && path != null){
+                                                    String img = oldUser.getImg();
+                                                    if(img.equals("default.png")) img = UUID.randomUUID().toString();
                                                     try {
                                                         store.getReference().child("profile_images")
                                                                 .child(oldUser.getImg())

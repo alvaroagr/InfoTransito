@@ -90,7 +90,7 @@ public class PostDetailsActivity extends AppCompatActivity {
     }
 
     private void loadPhoto() {
-        if (post.getPhotoId() != null) {
+        if (post.getPhotoId() != null && !post.getPhotoId().isEmpty()) {
             FirebaseStorage.getInstance().getReference().child("post_images").child(post.getPhotoId()).getDownloadUrl().addOnCompleteListener(
                     urlTask -> {
                         String url = urlTask.getResult().toString();
