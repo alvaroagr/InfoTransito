@@ -1,26 +1,24 @@
 package com.example.infotransito;
 
-import java.io.Serializable;
+public class Comment {
 
-public class Post implements Serializable {
     private String id;
-    private String title;
     private String content;
-    private long timestamp;
     private String userId;
     private String userName;
-    private int likes;
+    private String postId;
+    private long timestamp;
 
-    public Post() {
+    public Comment() {
     }
 
-    public Post(String id, String title, String content, String userId, String userName) {
+    public Comment(String id, String content, String userId, String userName, String postId,long timestamp) {
         this.id = id;
-        this.title = title;
         this.content = content;
         this.userId = userId;
         this.userName = userName;
-        this.likes = 0;
+        this.postId = postId;
+        this.timestamp = timestamp;
     }
 
     public String getId() {
@@ -29,14 +27,6 @@ public class Post implements Serializable {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getContent() {
@@ -59,6 +49,14 @@ public class Post implements Serializable {
         return userName;
     }
 
+    public String getPostId() {
+        return postId;
+    }
+
+    public void setPostId(String postId) {
+        this.postId = postId;
+    }
+
     public void setUserName(String userName) {
         this.userName = userName;
     }
@@ -69,13 +67,5 @@ public class Post implements Serializable {
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
-    }
-
-    public int getLikes() {
-        return likes;
-    }
-
-    public void setLikes(int likes) {
-        this.likes = likes;
     }
 }

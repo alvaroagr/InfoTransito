@@ -30,7 +30,7 @@ public class NewPostActivity extends AppCompatActivity {
         userId = getIntent().getExtras().getString("userId");
         username = getIntent().getExtras().getString("username");
 
-        backBtn = findViewById(R.id.backBtn);
+        backBtn = findViewById(R.id.postBackBtn);
         publishBtn = findViewById(R.id.publishBtn);
         imgBtn = findViewById(R.id.imgBtn);
         titleET = findViewById(R.id.titleET);
