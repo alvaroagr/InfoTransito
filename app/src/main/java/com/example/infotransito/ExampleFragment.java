@@ -1,6 +1,7 @@
 package com.example.infotransito;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -78,7 +79,9 @@ public class ExampleFragment extends Fragment {
         nameTV.setText(host.getMyUser().getName());
         editBtn.setOnClickListener(
                 v -> {
-                    Toast.makeText(host, "This btn works", Toast.LENGTH_LONG).show();
+                    Intent i = new Intent(host, EditProfileActivity.class);
+                    i.putExtra("user", host.getMyUser());
+                    startActivity(i);
                 }
         );
 
@@ -89,6 +92,7 @@ public class ExampleFragment extends Fragment {
         // Load profile picture
         if(host.getMyUser().getImg().contains("https://")){
             Glide.with(profileIV).load(host.getMyUser().getImg()).into(profileIV);
+            editBtn.setVisibility(View.INVISIBLE);
         } else {
             FirebaseStorage.getInstance().getReference()
                     .child("profile_images")
