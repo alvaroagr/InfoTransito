@@ -5,15 +5,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,6 +30,7 @@ public class PostDetailsActivity extends AppCompatActivity {
     private TextView date;
     private TextView content;
     private EditText commentEdt;
+    private ImageView postImg;
     private Button commentBtn;
     private Button back;
     private RecyclerView commentsList;
@@ -51,6 +56,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         commentEdt = findViewById(R.id.commentInput);
         commentsList = findViewById(R.id.commentsListRv);
         back = findViewById(R.id.postBackBtn);
+        postImg = findViewById(R.id.postImg);
 
         commentsList.setHasFixedSize(true);
         manager = new LinearLayoutManager(this);
@@ -79,15 +85,31 @@ public class PostDetailsActivity extends AppCompatActivity {
         );
 
         updateComments();
+
+        loadPhoto();
+    }
+
+    private void loadPhoto() {
+        if (post.getPhotoId() != null) {
+            FirebaseStorage.getInstance().getReference().child("post_images").child(post.getPhotoId()).getDownloadUrl().addOnCompleteListener(
+                    urlTask -> {
+                        String url = urlTask.getResult().toString();
+                        Glide.with(this).load(url).into(postImg);
+                    }
+            );
+        }
     }
 
     public void updateComments() {
-        db.collection("comments").whereEqualTo("postId", post.getId()).get().addOnCompleteListener(
-                task -> {
-                    for(DocumentSnapshot document : task.getResult().getDocuments()) {
-                        Comment currentComment = document.toObject(Comment.class);
-                        adapter.addComment(currentComment);
-                    }
+        db.collection("comments").
+                whereEqualTo("postId", post.getId()).
+                get().
+                addOnCompleteListener(
+                    task -> {
+                        for(DocumentSnapshot document : task.getResult().getDocuments()) {
+                            Comment currentComment = document.toObject(Comment.class);
+                            adapter.addComment(currentComment);
+                        }
                 }
         );
     }

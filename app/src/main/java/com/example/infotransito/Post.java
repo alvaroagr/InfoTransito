@@ -6,6 +6,7 @@ public class Post implements Serializable {
     private String id;
     private String title;
     private String content;
+    private String photoId;
     private long timestamp;
     private String userId;
     private String userName;
@@ -14,13 +15,14 @@ public class Post implements Serializable {
     public Post() {
     }
 
-    public Post(String id, String title, String content, String userId, String userName) {
+    public Post(String id, String title, String content, String userId, String userName, String photoId) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.userId = userId;
         this.userName = userName;
         this.likes = 0;
+        this.photoId = photoId;
     }
 
     public String getId() {
@@ -77,5 +79,13 @@ public class Post implements Serializable {
 
     public void setLikes(int likes) {
         this.likes = likes;
+    }
+
+    public String getPhotoId() {
+        return photoId;
+    }
+
+    public void setPhotoId(String photoId) {
+        this.photoId = photoId;
     }
 }
