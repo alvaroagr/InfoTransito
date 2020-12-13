@@ -5,32 +5,40 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
-public class PostDetails extends AppCompatActivity {
+public class PostDetailsActivity extends AppCompatActivity {
 
     private Post post;
     private TextView title;
     private TextView date;
     private TextView content;
     private EditText commentEdt;
+    private ImageView postImg;
     private Button commentBtn;
     private Button back;
     private RecyclerView commentsList;
     private LinearLayoutManager manager;
     private CommentsAdapter adapter;
     private FirebaseFirestore db;
+    private FirebaseAuth auth;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +46,7 @@ public class PostDetails extends AppCompatActivity {
         setContentView(R.layout.activity_post_details);
 
         db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
         post = (Post) getIntent().getExtras().get("post");
 
         title = findViewById(R.id.postTitleTv);
@@ -47,6 +56,7 @@ public class PostDetails extends AppCompatActivity {
         commentEdt = findViewById(R.id.commentInput);
         commentsList = findViewById(R.id.commentsListRv);
         back = findViewById(R.id.postBackBtn);
+        postImg = findViewById(R.id.postImg);
 
         commentsList.setHasFixedSize(true);
         manager = new LinearLayoutManager(this);
@@ -63,7 +73,31 @@ public class PostDetails extends AppCompatActivity {
         commentBtn.setOnClickListener(this::postComment);
         back.setOnClickListener(this::goBack);
 
+        db.collection("users").document(auth.getUid()).get().addOnCompleteListener(
+                task -> {
+                    if(task.isSuccessful()){
+                        user = task.getResult().toObject(User.class);
+                    } else {
+                        Toast.makeText(this, "Hubo un problema por su usuario.", Toast.LENGTH_LONG).show();
+                        finish();
+                    }
+                }
+        );
+
         updateComments();
+
+        loadPhoto();
+    }
+
+    private void loadPhoto() {
+        if (post.getPhotoId() != null) {
+            FirebaseStorage.getInstance().getReference().child("post_images").child(post.getPhotoId()).getDownloadUrl().addOnCompleteListener(
+                    urlTask -> {
+                        String url = urlTask.getResult().toString();
+                        Glide.with(this).load(url).into(postImg);
+                    }
+            );
+        }
     }
 
     public void updateComments() {
@@ -82,9 +116,11 @@ public class PostDetails extends AppCompatActivity {
 
     private void postComment(View v) {
         if(!commentEdt.getText().toString().trim().isEmpty()) {
-            Comment comment = new Comment(UUID.randomUUID().toString(), commentEdt.getText().toString(), post.getUserId(), post.getUserName(), post.getId(), System.currentTimeMillis());
+//            Comment comment = new Comment(UUID.randomUUID().toString(), commentEdt.getText().toString(), post.getUserId(), post.getUserName(), post.getId(), System.currentTimeMillis());
+            Comment comment = new Comment(UUID.randomUUID().toString(), commentEdt.getText().toString(), user.getId(), user.getName(), post.getId(), System.currentTimeMillis());
             db.collection("comments").document(comment.getId()).set(comment);
             adapter.addComment(comment);
+            commentEdt.setText("");
             runOnUiThread(
                     () -> {
                         Toast.makeText(this, "Tu comentario fue publicado", Toast.LENGTH_SHORT).show();

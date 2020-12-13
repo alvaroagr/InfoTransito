@@ -49,7 +49,7 @@ public class NewPostActivity extends AppCompatActivity {
         publishBtn = findViewById(R.id.publishBtn);
         imgBtn = findViewById(R.id.imgBtn);
         titleET = findViewById(R.id.titleET);
-        contentET = findViewById(R.id.contentET);
+        contentET = findViewById(R.id.descripcion);
 
         backBtn.setOnClickListener(
                 (v) -> {
@@ -99,7 +99,6 @@ public class NewPostActivity extends AppCompatActivity {
                         i.setType("image/*");
                         startActivityForResult(i, GALLERY_CALLBACK);
                         Toast.makeText(this, "Add Image", Toast.LENGTH_LONG).show();
-                        Log.e(">>>", "Has permission");
                     }
                 }
         );

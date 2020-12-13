@@ -18,10 +18,10 @@ public class Position {
     public Position() {
     }
 
-//    public Position(double lat, double lng) {
-//        this.lat = lat;
-//        this.lng = lng;
-//    }
+    public Position(double lat, double lng) {
+        this.lat = lat;
+        this.lng = lng;
+    }
 
     public Position(String user, double lat, double lng) {
         this.user = user;
