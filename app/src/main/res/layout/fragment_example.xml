@@ -5,13 +5,76 @@
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/profileIV"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:padding="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
+        app:srcCompat="@drawable/profile_def"
+        app:strokeColor="@color/primary"
+        app:strokeWidth="4dp" />
+
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/nameIV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ejemplo"
+        android:layout_marginStart="16dp"
+        android:paddingBottom="8dp"
+        android:text="Nombre"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/profileIV"
+        app:layout_constraintStart_toEndOf="@+id/profileIV"
+        app:layout_constraintTop_toTopOf="@+id/profileIV"
+        app:layout_constraintVertical_bias="0.37" />
+
+    <Button
+        android:id="@+id/editBtn"
+        style="@style/Btn"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="32dp"
+        android:text="Editar perfil"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/profileIV"
+        app:layout_constraintTop_toBottomOf="@+id/nameIV" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/profileIV">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mis posts"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/forum_postList"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
