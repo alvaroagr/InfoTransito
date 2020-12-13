@@ -67,12 +67,15 @@ public class PostDetails extends AppCompatActivity {
     }
 
     public void updateComments() {
-        db.collection("comments").whereEqualTo("postId", post.getId()).get().addOnCompleteListener(
-                task -> {
-                    for(DocumentSnapshot document : task.getResult().getDocuments()) {
-                        Comment currentComment = document.toObject(Comment.class);
-                        adapter.addComment(currentComment);
-                    }
+        db.collection("comments").
+                whereEqualTo("postId", post.getId()).
+                get().
+                addOnCompleteListener(
+                    task -> {
+                        for(DocumentSnapshot document : task.getResult().getDocuments()) {
+                            Comment currentComment = document.toObject(Comment.class);
+                            adapter.addComment(currentComment);
+                        }
                 }
         );
     }
