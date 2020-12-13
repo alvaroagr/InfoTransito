@@ -18,6 +18,8 @@ import android.widget.Button;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +29,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class ForumFragment extends Fragment {
 
     private MainActivity host;
+
+    private ListenerRegistration subscription;
 
     private RecyclerView postViewList;
     private LinearLayoutManager manager;
@@ -90,15 +94,37 @@ public class ForumFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
 
-        db.collection("posts").get().addOnCompleteListener(
-                task -> {
-                    for(DocumentSnapshot document : task.getResult().getDocuments()) {
-                        Post post = document.toObject(Post.class);
+//        db.collection("posts").orderBy("timestamp", Query.Direction.DESCENDING).get().addOnCompleteListener(
+//                task -> {
+//                    for(DocumentSnapshot document : task.getResult().getDocuments()) {
+//                        Post post = document.toObject(Post.class);
+//                        adapter.addPost(post);
+//                    }
+//                }
+//        );
+
+        subscribeToPosts();
+
+        return root;
+    }
+
+    public void subscribeToPosts(){
+        Query ref = db.collection("posts").orderBy("timestamp", Query.Direction.DESCENDING);
+        subscription = ref.addSnapshotListener(
+                (data, error) -> {
+                    adapter.clearPosts();
+
+                    for(DocumentSnapshot doc : data.getDocuments()){
+                        Post post = doc.toObject(Post.class);
                         adapter.addPost(post);
                     }
                 }
         );
+    }
 
-        return root;
+    @Override
+    public void onDestroy() {
+        subscription.remove();
+        super.onDestroy();
     }
 }
