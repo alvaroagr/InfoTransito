@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">InfoTransito</string>
     <string name="title_activity_maps">Map</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="server_client_id">9639837515-pf2t9s1nooabfune2sep5kl8461jo7j4.apps.googleusercontent.com</string>
 </resources>
