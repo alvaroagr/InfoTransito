@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -37,7 +38,8 @@ public class ForumFragment extends Fragment {
     private ForumAdapter adapter;
     private FirebaseFirestore db;
 
-    private Button forum_addBtn;
+//    private Button forum_addBtn;
+    private ImageButton forum_addBtn;
 
     public ForumFragment() {
         // Required empty public constructor

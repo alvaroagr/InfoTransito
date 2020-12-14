@@ -72,7 +72,7 @@ public class ViewMarkerActivity extends FragmentActivity implements OnMapReadyCa
         }
 
         backBtn.setOnClickListener(
-                v -> finish()
+                v -> exit()
         );
 
 //        Query q = FirebaseFirestore.getInstance()
@@ -173,4 +173,13 @@ public class ViewMarkerActivity extends FragmentActivity implements OnMapReadyCa
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 18));
     }
 
+    public void exit(){
+        finish();
+        overridePendingTransition(R.anim.stay, R.anim.close);
+    }
+
+    @Override
+    public void onBackPressed() {
+        exit();
+    }
 }

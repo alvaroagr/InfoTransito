@@ -158,6 +158,7 @@ public class LoginActivity extends AppCompatActivity {
     private void goToSignUp(View v){
         Intent i = new Intent(this, SignUpActivity.class);
         startActivity(i);
+        overridePendingTransition(R.anim.enter, R.anim.stay);
         finish();
     }
 }

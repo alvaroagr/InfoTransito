@@ -249,6 +249,7 @@ public class MapsFragment extends Fragment implements LocationListener, OnMapRea
                 i.putExtra("userId", host.getMyUser().getId());
                 i.putExtra("username", host.getMyUser().getName());
                 startActivity(i);
+                host.overridePendingTransition(R.anim.enter, R.anim.stay);
                 break;
 
             case R.id.grua:
@@ -258,6 +259,7 @@ public class MapsFragment extends Fragment implements LocationListener, OnMapRea
                 i.putExtra("userId", host.getMyUser().getId());
                 i.putExtra("username", host.getMyUser().getName());
                 startActivity(i);
+                host.overridePendingTransition(R.anim.enter, R.anim.stay);
                 break;
 
             case R.id.camara:
@@ -267,6 +269,7 @@ public class MapsFragment extends Fragment implements LocationListener, OnMapRea
                 i.putExtra("userId", host.getMyUser().getId());
                 i.putExtra("username", host.getMyUser().getName());
                 startActivity(i);
+                host.overridePendingTransition(R.anim.enter, R.anim.stay);
                 break;
 
             case R.id.policeControl:
@@ -276,6 +279,7 @@ public class MapsFragment extends Fragment implements LocationListener, OnMapRea
                 i.putExtra("userId", host.getMyUser().getId());
                 i.putExtra("username", host.getMyUser().getName());
                 startActivity(i);
+                host.overridePendingTransition(R.anim.enter, R.anim.stay);
                 break;
         }
 
@@ -296,6 +300,7 @@ public class MapsFragment extends Fragment implements LocationListener, OnMapRea
             i.putExtra("lng", m.getLng());
             i.putExtra("img", m.getImg());
             startActivity(i);
+            host.overridePendingTransition(R.anim.enter, R.anim.stay);
         }
         return true;
     }

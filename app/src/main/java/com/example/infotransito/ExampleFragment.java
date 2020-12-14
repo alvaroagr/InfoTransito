@@ -82,6 +82,7 @@ public class ExampleFragment extends Fragment {
                     Intent i = new Intent(host, EditProfileActivity.class);
                     i.putExtra("user", host.getMyUser());
                     startActivity(i);
+                    host.overridePendingTransition(R.anim.enter, R.anim.stay);
                 }
         );
 

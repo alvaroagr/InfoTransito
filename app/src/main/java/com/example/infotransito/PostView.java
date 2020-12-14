@@ -8,6 +8,9 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.google.firebase.storage.FirebaseStorage;
+
 public class PostView extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     private ConstraintLayout root;
@@ -49,6 +52,23 @@ public class PostView extends RecyclerView.ViewHolder implements View.OnClickLis
 
     public void setPost(Post post) {
         this.post = post;
+
+        if(post.getPhotoId() != null){
+            if(!post.getPhotoId().isEmpty()){
+                FirebaseStorage.getInstance().getReference()
+                        .child("post_images")
+                        .child(post.getPhotoId())
+                        .getDownloadUrl()
+                        .addOnCompleteListener(
+                                task -> {
+                                    if(task.isSuccessful()){
+                                        String url = task.getResult().toString();
+                                        Glide.with(img).load(url).into(img);
+                                    }
+                                }
+                        );
+            }
+        }
     }
 
     public interface OnPostClicked {
